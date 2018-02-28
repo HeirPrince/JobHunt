@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.prince.jobhunt.activities.Post">
+
+    <include layout="@layout/toolbar_normal"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar_normal"
+        android:id="@+id/image"
+        android:layout_margin="6dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:id="@+id/img" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"
+        android:orientation="vertical"
+        android:layout_below="@+id/image">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textColor="#000"
+                android:text="Job Category"/>
+
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="16dp"
+                android:hint="Choose Category"
+                android:id="@+id/category"/>
+
+        </LinearLayout>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_edittext"
+            android:id="@+id/title"
+            android:layout_marginBottom="16dp"
+            android:hint="Job Title..."/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_edittext"
+            android:id="@+id/desc"
+            android:layout_marginBottom="6dp"
+            android:hint="Job Description..."/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_edittext"
+            android:id="@+id/address"
+            android:layout_marginBottom="6dp"
+            android:hint="Address"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_edittext"
+                android:id="@+id/salary"
+                android:layout_weight="1"
+                android:layout_marginRight="3dp"
+                android:hint="Salary"/>
+
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="3dp"
+                android:hint="Salary type"
+                android:id="@+id/salary_type"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

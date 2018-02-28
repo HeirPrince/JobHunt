@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "79007962662",
+    "firebase_url": "https://jobhunt-82189.firebaseio.com",
+    "project_id": "jobhunt-82189",
+    "storage_bucket": "jobhunt-82189.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:79007962662:android:221ad02de58a6428",
+        "android_client_info": {
+          "package_name": "com.example.prince.jobhunt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "79007962662-oka564rveffq41imu1st8th1t1vnpnhq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.prince.jobhunt",
+            "certificate_hash": "50c158d8d59cfaa7f12f0addfaf917aa119705c1"
+          }
+        },
+        {
+          "client_id": "79007962662-6msft9aodcdrhqasvdbiqnpv9r48uq8v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAinBpVfSATRNG7HETlweJHHlB6vIbnHPo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "79007962662-6msft9aodcdrhqasvdbiqnpv9r48uq8v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
