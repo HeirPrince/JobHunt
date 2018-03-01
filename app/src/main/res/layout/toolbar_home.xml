@@ -2,9 +2,9 @@
 <android.support.v7.widget.Toolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:theme="@style/ToolBar"
     android:layout_height="wrap_content"
     android:background="@color/colorAccent"
-    android:id="@+id/toolbar_home"
-    android:theme="@style/AppTheme">
+    android:id="@+id/toolbar_home">
 
 </android.support.v7.widget.Toolbar>

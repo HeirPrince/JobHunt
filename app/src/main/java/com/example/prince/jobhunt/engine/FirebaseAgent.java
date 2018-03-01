@@ -325,4 +325,28 @@ public class FirebaseAgent {
 		void userList(List<User> list);
 	}
 
+	public interface getJob{
+		void job(Job job);
+	}
+
+	public void getJobByID(String id, final getJob callback){
+		DocumentReference jobs = firestore.collection("jobs").document(id);
+
+		jobs.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+			@Override
+			public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+				if (e != null){
+					Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+				}
+
+				if (documentSnapshot != null) {
+					Job job = documentSnapshot.toObject(Job.class);
+					callback.job(job);
+				} else {
+					callback.job(null);
+				}
+			}
+		});
+	}
+
 }

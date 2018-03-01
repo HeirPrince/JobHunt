@@ -1,33 +1,9 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="AppTheme.Base"/>
-
-    <style name="AppTheme.Base" parent="Theme.Design.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <!--&lt;!&ndash;<item name="textColorPrimary">@color/colorPrimaryText</item>&ndash;&gt;-->
-        <!--<item name="textColorSecondary">@color/colorSecondaryText</item>-->
-        <!--<item name="dividerHorizontal">@color/colorDivider</item>-->
-        <!--<item name="android:windowNoTitle">true</item>-->
-        <!--<item name="windowActionBar">false</item>-->
-    </style>
-
-    <style name="AppTheme.Crop" parent="Base.Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowContentTransitions">true</item>
-    </style>
-
-    <style name="AppTheme.Transparent" parent="Theme.Design.Light.NoActionBar" >
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowTranslucentStatus">true</item>
+    <style name="MaterialTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:colorAccent">@color/colorAccent</item>
     </style>
 
 </resources>

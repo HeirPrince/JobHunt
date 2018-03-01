@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/j_details"
-    android:theme="@style/AppTheme"
     android:fitsSystemWindows="true"
     tools:context="com.example.prince.jobhunt.activities.JobDetails">
 
@@ -134,7 +133,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Apply"/>
+            android:text="Apply"
+            android:onClick="applyJob"/>
 
     </RelativeLayout>
 

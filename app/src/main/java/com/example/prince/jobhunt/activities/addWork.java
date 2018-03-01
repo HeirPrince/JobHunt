@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -12,6 +13,7 @@ import com.example.prince.jobhunt.engine.AuthManager;
 import com.example.prince.jobhunt.engine.Constants;
 import com.example.prince.jobhunt.engine.FirebaseAgent;
 import com.example.prince.jobhunt.model.User;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import butterknife.BindView;
@@ -25,6 +27,9 @@ public class addWork extends AppCompatActivity {
 	@BindView(R.id.profile_photo)CircleImageView profile_photo;
 	@BindView(R.id.profile_career)TextView profile_carrer;
 	@BindView(R.id.appbar)AppBarLayout appBarLayout;
+	@BindView(R.id.work)EditText work;
+	@BindView(R.id.work_desc)EditText work_desc;
+	@BindView(R.id.category)MaterialSpinner wok_category;
 
 	private AuthManager authManager;
 	private FirebaseAgent agent;
@@ -45,7 +50,6 @@ public class addWork extends AppCompatActivity {
 	public void setupToolbar(){
 		setSupportActionBar(toolbar);
 		//set padding
-		appBarLayout.setPadding(0, Constants.getStatusBarHeight(this), 0, 0);
 
 		// create our manager instance after the content view is set
 		SystemBarTintManager tintManager = new SystemBarTintManager(this);

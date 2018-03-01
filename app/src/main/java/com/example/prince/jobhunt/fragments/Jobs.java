@@ -24,6 +24,7 @@ import com.example.prince.jobhunt.model.Job;
 import com.example.prince.jobhunt.model.User;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
@@ -140,7 +141,11 @@ public class Jobs extends Fragment {
 				holder.itemView.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
-						startActivity(new Intent(getContext(), JobDetails.class));
+						DocumentSnapshot snapshot = getSnapshots().getSnapshot(holder.getAdapterPosition());
+						String id = snapshot.getId();
+						Intent i = new Intent(getContext(), JobDetails.class);
+						i.putExtra("job_id", id);
+						startActivity(i);
 					}
 				});
 

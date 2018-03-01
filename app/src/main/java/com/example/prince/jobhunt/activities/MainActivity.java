@@ -6,8 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.example.prince.jobhunt.R;
-import com.example.prince.jobhunt.engine.FirebaseAgent;
 import com.example.prince.jobhunt.engine.AuthManager;
+import com.example.prince.jobhunt.engine.FirebaseAgent;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;

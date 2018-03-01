@@ -16,13 +16,12 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.prince.jobhunt.R;
-import com.example.prince.jobhunt.engine.Constants;
 import com.example.prince.jobhunt.engine.FirebaseAgent;
 import com.example.prince.jobhunt.engine.NonSwipableViewPager;
 import com.example.prince.jobhunt.fragments.Jobs;
-import com.example.prince.jobhunt.fragments.Workers;
 import com.example.prince.jobhunt.fragments.Profile;
 import com.example.prince.jobhunt.fragments.Search;
+import com.example.prince.jobhunt.fragments.Applications;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -124,8 +123,7 @@ public class Home extends AppCompatActivity {
 
     public void setupToolbar(){
         setSupportActionBar(toolbar);
-        //set padding
-        toolbar.setPadding(0, Constants.getStatusBarHeight(this), 0, 0);
+        //set paddin
 
         // create our manager instance after the content view is set
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
@@ -151,7 +149,7 @@ public class Home extends AppCompatActivity {
 
         SlideAdapter adapter = new SlideAdapter(getSupportFragmentManager());
         adapter.addFragment(new Jobs());
-        adapter.addFragment(new Workers());
+        adapter.addFragment(new Applications());
         adapter.addFragment(new Search());
         adapter.addFragment(new Profile());
 

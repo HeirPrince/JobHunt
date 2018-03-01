@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:layout_margin="6dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="16dp"
+            android:id="@+id/topPanel"
+            android:layout_marginTop="6dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:id="@+id/user_photo"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="6dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Username"
+                    android:id="@+id/user_name"
+                    android:textColor="#000" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="subtitle"
+                    android:textColor="@color/colorDivider"
+                    android:textSize="14sp"
+                    android:id="@+id/user_career"
+                    android:layout_marginTop="2dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="16dp"
+            android:textSize="10sp"
+            android:text="March, 01, 2018"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:id="@+id/desc"
+            android:layout_below="@+id/topPanel"
+            android:textSize="15sp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="6dp"
+            android:text="alkkjaskdjalsdjlasdjlkajdlkajdlajdlkajdlakmsdlamdlkmads/nkjskjhasdjhkjadhjadhjahdskjahdjkahsdjashdjasdjadhjahdjkahdsjkasdhjkasdhjkasdhjkasdhka"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/desc"
+            android:layout_marginTop="6dp"
+            android:orientation="horizontal" >
+
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</android.support.v7.widget.CardView>

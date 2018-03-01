@@ -48,7 +48,6 @@ public class Profile extends Fragment {
         agent = new FirebaseAgent(getContext());
         auth = FirebaseAuth.getInstance();
 
-
         profile_name = v.findViewById(R.id.profile_name);
         profile_photo = v.findViewById(R.id.profile_photo);
         profile_desc = v.findViewById(R.id.profile_desc);
@@ -71,8 +70,6 @@ public class Profile extends Fragment {
 
     public void popAppBar(){
         //profile info
-        int size = Constants.getStatusBarHeight(getContext());
-        appbar.setPadding(0, size, 0 ,0);
         agent.getUserByUID(auth.getCurrentUser().getUid(), new FirebaseAgent.getUser() {
             @Override
             public void gottenUser(User user) {
