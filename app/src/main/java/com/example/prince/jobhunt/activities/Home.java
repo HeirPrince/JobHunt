@@ -1,5 +1,7 @@
 package com.example.prince.jobhunt.activities;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,15 +15,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.prince.jobhunt.R;
 import com.example.prince.jobhunt.engine.FirebaseAgent;
 import com.example.prince.jobhunt.engine.NonSwipableViewPager;
+import com.example.prince.jobhunt.engine.onSearchQueryListener;
+import com.example.prince.jobhunt.fragments.Notifications;
 import com.example.prince.jobhunt.fragments.Jobs;
 import com.example.prince.jobhunt.fragments.Profile;
 import com.example.prince.jobhunt.fragments.Search;
-import com.example.prince.jobhunt.fragments.Applications;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -47,6 +51,7 @@ public class Home extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseUser active_user;
     private FirebaseAgent agent;
+    onSearchQueryListener callback;
 
 
     @Override
@@ -83,24 +88,10 @@ public class Home extends AppCompatActivity {
                 switch (position){
                     case 0:
                         fab.setVisibility(View.VISIBLE);
-                        fab.setImageDrawable(getDrawable(R.drawable.job));
-                        fab.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                startActivity(new Intent(Home.this, Post.class));
-                            }
-                        });
                         getSupportActionBar().show();
                         break;
                     case 1:
-                        fab.setVisibility(View.VISIBLE);
-                        fab.setImageDrawable(getDrawable(R.drawable.vector_locate_white));
-                        fab.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                startActivity(new Intent(Home.this, addWork.class));
-                            }
-                        });
+                        fab.setVisibility(View.GONE);
                         getSupportActionBar().show();
                         break;
                     case 2:
@@ -119,6 +110,17 @@ public class Home extends AppCompatActivity {
 
             }
         });
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Home.this, Post.class));
+            }
+        });
+    }
+
+    public void moveTo(int pos){
+        pager.setCurrentItem(pos);
     }
 
     public void setupToolbar(){
@@ -149,7 +151,7 @@ public class Home extends AppCompatActivity {
 
         SlideAdapter adapter = new SlideAdapter(getSupportFragmentManager());
         adapter.addFragment(new Jobs());
-        adapter.addFragment(new Applications());
+        adapter.addFragment(new Notifications());
         adapter.addFragment(new Search());
         adapter.addFragment(new Profile());
 
@@ -159,9 +161,29 @@ public class Home extends AppCompatActivity {
         bnv.setupWithViewPager(pager);
         setupToolbar();
     }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.home_menu, menu);
+        SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
+        android.widget.SearchView searchView = (android.widget.SearchView) menu.findItem(R.id.search).getActionView();
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconified(true);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+
         return true;
     }
 
@@ -182,6 +204,9 @@ public class Home extends AppCompatActivity {
                         Toast.makeText(Home.this, "no internet connection", Toast.LENGTH_SHORT).show();
                     }
                 });
+                break;
+            case R.id.search:
+
                 break;
         }
 
@@ -232,5 +257,18 @@ public class Home extends AppCompatActivity {
         }
     }
 
+    //interfaces
+    public void onSearch(onSearchQueryListener listener){
+        callback = listener;
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
 }

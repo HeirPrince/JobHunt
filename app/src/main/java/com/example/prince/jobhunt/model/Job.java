@@ -81,4 +81,5 @@ public class Job {
 	public void setOwner(String owner) {
 		this.owner = owner;
 	}
+
 }

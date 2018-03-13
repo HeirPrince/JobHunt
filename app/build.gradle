@@ -46,7 +46,8 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     //Dialogs
-    implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'//https://github.com/afollestad/material-dialogs
+    implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
+//https://github.com/afollestad/material-dialogs
     //Material Spinner
     implementation 'com.jaredrummler:material-spinner:1.2.4'
 

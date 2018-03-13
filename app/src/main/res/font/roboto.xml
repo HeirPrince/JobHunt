@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android">
+
+    //Roboto medium
+    <font
+        android:font="@font/roboto_medium"
+        android:fontWeight="400"
+        android:fontStyle="normal"/>
+
+    <font
+        android:font="@font/roboto_mediumitalic"
+        android:fontWeight="400"
+        android:fontStyle="italic"/>
+
+    //Roboto thin
+    <font
+        android:font="@font/roboto_thin"
+        android:fontWeight="400"
+        android:fontStyle="normal"/>
+
+    <font
+        android:font="@font/roboto_thinitalic"
+        android:fontWeight="400"
+        android:fontStyle="italic"/>
+
+    //Roboto Black
+    <font
+        android:font="@font/roboto_black"
+        android:fontWeight="400"
+        android:fontStyle="normal"/>
+
+    <font
+        android:font="@font/roboto_blackitalic"
+        android:fontWeight="400"
+        android:fontStyle="italic"/>
+
+    //Roboto Light
+    <font
+        android:font="@font/roboto_light"
+        android:fontWeight="400"
+        android:fontStyle="normal"/>
+
+    <font
+        android:font="@font/roboto_lightitalic"
+        android:fontWeight="400"
+        android:fontStyle="italic"/>
+
+    //Roboto Regular
+    <font
+        android:font="@font/roboto_regular"
+        android:fontWeight="400"
+        android:fontStyle="normal"/>
+
+    <font
+        android:font="@font/roboto_italic"
+        android:fontWeight="400"
+        android:fontStyle="italic"/>
+
+    //Roboto Bold
+    <font
+        android:font="@font/roboto_bold"
+        android:fontWeight="400"
+        android:fontStyle="normal"/>
+
+    <font
+        android:font="@font/roboto_bolditalic"
+        android:fontWeight="400"
+        android:fontStyle="italic"/>
+
+</font-family>

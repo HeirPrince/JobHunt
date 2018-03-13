@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.prince.jobhunt.activities.Instructions">
+
+    <include layout="@layout/toolbar_home"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar_home">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/header"
+            android:layout_margin="6dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="Give Instructions to 'Name'"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Or, "
+                android:layout_marginRight="6dp"
+                android:layout_toStartOf="@+id/chtbtn"
+                android:layout_centerVertical="true" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:text="CHAT"
+                android:background="@drawable/shape_btn_submit"
+                android:textColor="@color/colorWhite"
+                android:id="@+id/chtbtn"
+                android:onClick="openChatRoom"/>
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/btnSend"
+            android:layout_below="@+id/header"
+            android:layout_margin="6dp"
+            android:id="@+id/body">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginBottom="6dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Duration"
+                    android:textStyle="bold"
+                    android:textColor="#464646"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/duration"
+                    android:orientation="vertical"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="6dp">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Start time"
+                                android:layout_toRightOf="@+id/timePicker"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="16dp"
+                                android:id="@+id/timeStart"/>
+
+                            <View
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:id="@+id/timePicker"
+                                android:layout_centerVertical="true"
+                                android:backgroundTint="@color/colorAccent"
+                                android:background="@drawable/vector_time_picker"/>
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="End time"
+                                android:layout_toRightOf="@+id/timePicker_end"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="16dp"
+                                android:id="@+id/timeEnd"/>
+
+                            <View
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:id="@+id/timePicker_end"
+                                android:layout_centerVertical="true"
+                                android:backgroundTint="@color/colorAccent"
+                                android:background="@drawable/vector_time_picker"/>
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="6dp">
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Start date"
+                                android:layout_toRightOf="@+id/datePicker"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="16dp"
+                                android:id="@+id/dateStart"/>
+
+                            <View
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:id="@+id/datePicker"
+                                android:layout_centerVertical="true"
+                                android:backgroundTint="@color/colorAccent"
+                                android:background="@drawable/vector_date_picker"/>
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="End date"
+                                android:layout_toRightOf="@+id/datePicker_end"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="16dp"
+                                android:id="@+id/dateEnd"/>
+
+                            <View
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:id="@+id/datePicker_end"
+                                android:layout_centerVertical="true"
+                                android:backgroundTint="@color/colorAccent"
+                                android:background="@drawable/vector_date_picker"/>
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Price"
+                    android:textStyle="bold"
+                    android:textColor="#464646"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp"
+                    android:layout_margin="6dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="is Price negotiable ?"/>
+
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:id="@+id/isNeg"
+                            android:backgroundTint="@color/colorAccent"/>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_gravity="center">
+
+                        <RadioGroup
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Part time" />
+
+                            <RadioButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Full time"
+                                android:layout_marginLeft="16dp"/>
+
+                        </RadioGroup>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CV"
+                        android:textStyle="bold"
+                        android:textColor="#464646"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginTop="6dp"/>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/shape_btn_submit"
+                        android:onClick="uploadPic"
+                        android:text="Upload"
+                        android:layout_alignParentEnd="true"
+                        android:textColor="@color/colorWhite" />
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/cvImg"
+                    android:scaleType="centerCrop"
+                    android:layout_margin="2dp"/>
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            android:text="SEND"
+            android:id="@+id/btnSend"
+            android:onClick="sendInstructions"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/shape_btn_submit"
+            android:textColor="@color/colorWhite"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

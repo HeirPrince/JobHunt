@@ -13,6 +13,12 @@
     </style>
 
     <style name="ToolBar" parent="MaterialTheme">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">#fff</item>
+        <item name="android:textColorSecondary">#fff</item>
+    </style>
+
+    <style name="ToolBar.Crop" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:textColorPrimary">#fff</item>
         <item name="android:textColorSecondary">#fff</item>
     </style>

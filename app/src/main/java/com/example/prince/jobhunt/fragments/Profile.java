@@ -26,6 +26,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class Profile extends Fragment {
 
+    private int page;
+    private String title;
+
     private TextView profile_name, profile_email, profile_desc;
     private CircleImageView profile_photo;
     private AppBarLayout appbar;
@@ -33,6 +36,14 @@ public class Profile extends Fragment {
 
     private FirebaseAgent agent;
     private FirebaseAuth auth;
+
+    public static Profile newInstance(int page, String title){
+        Profile profile = new Profile();
+        Bundle args = new Bundle();
+        args.putInt("someInt", page);
+        args.putString("someTitle", title);
+        return profile;
+    }
 
     public Profile() {
         // Required empty public constructor

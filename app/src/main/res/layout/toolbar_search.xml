@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    style="@style/ToolBar"
+    android:layout_height="130dp"
+    android:id="@+id/toolbar_search">
+
+    <include layout="@layout/toolbar_home"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <com.jaredrummler.materialspinner.MaterialSpinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/cat"
+            app:ms_hint_color="@color/colorAccent"
+            app:ms_hint="Select Skill"/>
+
+    </RelativeLayout>
+
+
+
+
+
+</android.support.design.widget.AppBarLayout>

@@ -13,9 +13,11 @@ import android.widget.Toast;
 import com.example.prince.jobhunt.R;
 import com.example.prince.jobhunt.engine.AuthManager;
 import com.example.prince.jobhunt.engine.FirebaseAgent;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,12 +28,13 @@ public class Register extends AppCompatActivity {
     public static final int GALLERY_CODE = 123;
     @BindView(R.id.username)EditText username;
     @BindView(R.id.email)EditText email;
-    @BindView(R.id.about)EditText about;
-    @BindView(R.id.career)EditText career;
+    @BindView(R.id.skill)MaterialSpinner skill;
     @BindView(R.id.profile)
     CircleImageView profile_pic;
+    @BindView(R.id.add_profile)View addImage;
 
     private Uri file;
+    private ArrayList<String> skills;
 
     //Utils
     private FirebaseAgent agent;
@@ -48,10 +51,10 @@ public class Register extends AppCompatActivity {
 
         //checking if a user is registered
         if (authManager.checkAuth()){
-
+            setCats();
         }
 
-        profile_pic.setOnClickListener(new View.OnClickListener() {
+        addImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getImage();
@@ -67,15 +70,28 @@ public class Register extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(i, "Select image"), GALLERY_CODE);
     }
 
+    public void setCats(){
+        skills = new ArrayList<>();
+        skills.add("Engineering");
+        skills.add("Android Programming");
+        skills.add("Software Engineer");
+        skills.add("Mechanical Engineer");
+        skills.add("Designer");
+
+        skill.setItems(skills);
+    }
+
     //button click to insert a new user
     public void insertNew(View view) {
+
+
         String u = username.getText().toString();
         String e = email.getText().toString();
-        String abt = about.getText().toString();
-        String c = career.getText().toString();
+        String s = skills.get(skill.getSelectedIndex());
+
 
         if (file != null){
-            agent.addUser(authManager.getCurrentUser(),u, authManager.getCurrentUID(), e, c, abt, file);
+            agent.addUser(authManager.getCurrentUser(),u, authManager.getCurrentUID(), e, s, "Available", file);
         }else {
             Toast.makeText(this, "no image loaded", Toast.LENGTH_SHORT).show();
         }

@@ -39,13 +39,23 @@ public class Search extends Fragment {
 	private FirebaseFirestore database;
 	private ProgressBar progressBar;
 
+	private int page;
+	private String title;
+
+	public static Search newInstance(int page, String title){
+		Search search = new Search();
+		Bundle args = new Bundle();
+		args.putInt("someInt", page);
+		args.putString("someTitle", title);
+		return search;
+	}
+
 	public Search() {
 		// Required empty public constructor
 		agent = new FirebaseAgent(getContext());
 		authManager = new AuthManager(getContext());
 		database = FirebaseFirestore.getInstance();
 	}
-
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

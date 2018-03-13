@@ -67,7 +67,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_gravity="center_vertical"
                         android:layout_marginEnd="16dp"
-                        android:background="@drawable/edit" />
+                        android:background="@drawable/vector_edit" />
 
                 </RelativeLayout>
 

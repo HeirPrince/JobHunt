@@ -6,9 +6,12 @@
     <string name="jobs">Jobs</string>
     <string name="profile">Profile</string>
     <string name="application">Applications</string>
+    <string name="quote_open">"</string>
+    <string name="quote_close">"</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search_hint">Search</string>
 
     <!--Career spinner-->
     <string-array name="careers">

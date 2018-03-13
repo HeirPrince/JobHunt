@@ -9,14 +9,16 @@ public class Application {
 	private String uid;
 	private String desc;
 	private String salary;
+	private String job_id;
 
 	public Application() {
 	}
 
-	public Application(String uid, String desc, String salary) {
+	public Application(String uid, String desc, String salary, String job_id) {
 		this.uid = uid;
 		this.desc = desc;
 		this.salary = salary;
+		this.job_id = job_id;
 	}
 
 	public String getUid() {
@@ -41,5 +43,13 @@ public class Application {
 
 	public void setSalary(String salary) {
 		this.salary = salary;
+	}
+
+	public String getJob_id() {
+		return job_id;
+	}
+
+	public void setJob_id(String job_id) {
+		this.job_id = job_id;
 	}
 }
