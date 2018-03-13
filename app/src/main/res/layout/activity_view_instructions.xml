@@ -154,8 +154,16 @@
 
     </LinearLayout>
 
-
-
-
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:text="SEND"
+        android:id="@+id/btnSend"
+        android:onClick="acceptJob"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/shape_btn_submit"
+        android:textColor="@color/colorWhite"/>
 
 </RelativeLayout>

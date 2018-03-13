@@ -3,7 +3,9 @@ package com.example.prince.jobhunt.activities;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.prince.jobhunt.R;
 import com.example.prince.jobhunt.engine.AuthManager;
@@ -15,6 +17,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,6 +53,7 @@ public class ViewInstructions extends AppCompatActivity {
 
 	public void setViews(){
 		firestore.collection("notifications")
+				.whereEqualTo("receiver", authManager.getCurrentUID())
 				.get()
 				.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 					@Override
@@ -83,4 +89,26 @@ public class ViewInstructions extends AppCompatActivity {
 		});
 	}
 
+	public void acceptJob(View view) {
+		Map<String, Boolean> onDuty = new HashMap<>();
+		onDuty.put(authManager.getCurrentUID(), true);
+
+		firestore.collection("duty").document(authManager.getCurrentUID())
+				.set(onDuty)
+				.addOnCompleteListener(new OnCompleteListener<Void>() {
+					@Override
+					public void onComplete(@NonNull Task<Void> task) {
+						if (task.isSuccessful()) {
+							Toast.makeText(ViewInstructions.this, "job done", Toast.LENGTH_SHORT).show();
+						}else {
+							Toast.makeText(ViewInstructions.this, "job failed", Toast.LENGTH_SHORT).show();
+						}
+					}
+				}).addOnFailureListener(new OnFailureListener() {
+			@Override
+			public void onFailure(@NonNull Exception e) {
+				Toast.makeText(ViewInstructions.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
 }

@@ -23,6 +23,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -506,6 +507,31 @@ public class FirebaseAgent {
 									callback.downloadImg(null);
 							}
 						});
+					}
+				});
+	}
+
+	//duty status
+	public interface dutyStatusListener{
+		void isOnDuty(Boolean working);
+	}
+
+	public void getDutyStatus(final dutyStatusListener callback){
+		firestore.collection("duty")
+				.addSnapshotListener(new EventListener<QuerySnapshot>() {
+					@Override
+					public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+						if (e != null)
+							return;
+
+						for (DocumentSnapshot snapshot : documentSnapshots){
+							if (snapshot.getBoolean(authManager.getCurrentUID())){
+								callback.isOnDuty(true);
+							}else {
+								callback.isOnDuty(false);
+							}
+						}
+
 					}
 				});
 	}

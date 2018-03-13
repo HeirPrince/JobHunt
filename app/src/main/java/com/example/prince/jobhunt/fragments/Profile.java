@@ -29,7 +29,7 @@ public class Profile extends Fragment {
     private int page;
     private String title;
 
-    private TextView profile_name, profile_email, profile_desc;
+    private TextView profile_name, profile_email, profile_desc, duty;
     private CircleImageView profile_photo;
     private AppBarLayout appbar;
     private View edit_p;
@@ -65,6 +65,7 @@ public class Profile extends Fragment {
         profile_email = v.findViewById(R.id.profile_email);
         edit_p = v.findViewById(R.id.edit_profile);
         appbar = v.findViewById(R.id.appbar);
+        duty = v.findViewById(R.id.duty);
 
         edit_p.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,6 +96,16 @@ public class Profile extends Fragment {
                             Glide.with(getActivity())
                                     .load(url)
                                     .into(profile_photo);
+                            agent.getDutyStatus(new FirebaseAgent.dutyStatusListener() {
+                                @Override
+                                public void isOnDuty(Boolean working) {
+                                    if (working){
+                                        duty.setText("on Duty");
+                                    }else {
+                                        duty.setText("off Duty");
+                                    }
+                                }
+                            });
                         }
                     }
 
