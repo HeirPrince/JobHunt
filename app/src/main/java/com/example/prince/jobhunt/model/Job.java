@@ -14,6 +14,7 @@ public class Job {
 	private int salary;
 	private String salary_type;
 	private String owner;
+	private String timeStamp;
 
 	public Job() {
 	}
@@ -82,4 +83,11 @@ public class Job {
 		this.owner = owner;
 	}
 
+	public String getTimeStamp() {
+		return timeStamp;
+	}
+
+	public void setTimeStamp(String timeStamp) {
+		this.timeStamp = timeStamp;
+	}
 }

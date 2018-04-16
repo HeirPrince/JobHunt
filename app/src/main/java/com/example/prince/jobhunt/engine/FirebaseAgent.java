@@ -10,7 +10,9 @@ import android.widget.Toast;
 import com.example.prince.jobhunt.activities.MainActivity;
 import com.example.prince.jobhunt.model.ImageItem;
 import com.example.prince.jobhunt.model.Job;
+import com.example.prince.jobhunt.model.Loc;
 import com.example.prince.jobhunt.model.Notyfication;
+import com.example.prince.jobhunt.model.Rating;
 import com.example.prince.jobhunt.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -18,6 +20,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -29,6 +32,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +49,8 @@ public class FirebaseAgent {
 	private FirebaseUser active;
 	private StorageReference userRef;
 	private AuthManager authManager;
+	private StorageAgent storageAgent;
+	private TimeUtils timeUtils;
 
 	public FirebaseAgent(Context context) {
 		this.context = context;
@@ -52,7 +58,9 @@ public class FirebaseAgent {
 		auth = FirebaseAuth.getInstance();
 		active = auth.getCurrentUser();
 		userRef = FirebaseStorage.getInstance().getReferenceFromUrl(Constants.USER_PROFILE_PATH);
-		authManager = new AuthManager(context);
+		authManager = new AuthManager();
+		timeUtils = new TimeUtils();
+		this.storageAgent = new StorageAgent(context);
 	}
 
 	//adding a new user to database
@@ -129,7 +137,9 @@ public class FirebaseAgent {
 						public void onSuccess(DocumentReference documentReference) {
 							dialog.dismiss();
 							String id = documentReference.getId();
-							addImagetoDB(imageItems, id, image);
+							storageAgent.uploadImage(Constants.IMAGE_PATH_JOBS_MAIN, id, image);
+							storageAgent.uploadMultipleImages(Constants.IMAGE_PATH_JOBS_MAIN, id, imageItems);
+
 
 						}
 					}).addOnFailureListener(new OnFailureListener() {
@@ -142,53 +152,57 @@ public class FirebaseAgent {
 
 	}
 
-	public void addImagetoDB(final List<ImageItem> imageItems, final String id, final Uri file){
+	public void addImagetoDB(final List<ImageItem> imageItems, final String id, final Uri file) {
 
 		final Map<String, Object> images = new HashMap<>();
-		for (int i = 0; i < imageItems.size(); i++){
+		for (int i = 0; i < imageItems.size(); i++) {
 			images.put(imageItems.get(i).getName(), imageItems.get(i).getName());
 		}
 
-		if (imageItems != null){
+		if (imageItems != null) {
 			//TODO show dialog to ask
 			//if yes
 			Map<String, String> big_image_map = new HashMap<>();
 			big_image_map.put(id, id);
-			firestore.collection("images").document("jobs").collection(id).document("main")
-					.set(big_image_map)
-					.addOnSuccessListener(new OnSuccessListener<Void>() {
-						@Override
-						public void onSuccess(Void aVoid) {
-							if (images != null){
-								firestore.collection("images").document("jobs").collection(id).document("others")
-										.set(images)
-										.addOnSuccessListener(new OnSuccessListener<Void>() {
-											@Override
-											public void onSuccess(Void aVoid) {
-												addImagetoStorage(imageItems, id, file);
-											}
-										}).addOnFailureListener(new OnFailureListener() {
-									@Override
-									public void onFailure(@NonNull Exception e) {
-										Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-									}
-								});
-							}else {
-								//save no images
+			for (final ImageItem item : imageItems) {
+				firestore.collection("images").document("jobs").collection(id).document("main")
+						.set(big_image_map)
+						.addOnCompleteListener(new OnCompleteListener<Void>() {
+							@Override
+							public void onComplete(@NonNull Task<Void> task) {
+//								if (item != null) {
+//									firestore.collection("images").document("jobs").collection(id).document("others")
+//											.set(item)
+//											.addOnSuccessListener(new OnSuccessListener<Void>() {
+//												@Override
+//												public void onSuccess(Void aVoid) {
+//													addImagetoStorage(imageItems, id, file);
+//												}
+//											}).addOnFailureListener(new OnFailureListener() {
+//										@Override
+//										public void onFailure(@NonNull Exception e) {
+//											Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+//										}
+//									});
+//								} else {
+//									//save no images
+//								}
 							}
-						}
-					}).addOnFailureListener(new OnFailureListener() {
-				@Override
-				public void onFailure(@NonNull Exception e) {
-					Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-				}
-			});
+						})
+						.addOnFailureListener(new OnFailureListener() {
+							@Override
+							public void onFailure(@NonNull Exception e) {
+								//TODO handle job not saved
+							}
+						});
+			}
+
 
 			//if no
 		}
 	}
 
-	public void addImagetoStorage(final List<ImageItem> imageItems, String id, Uri img){
+	public void addImagetoStorage(final List<ImageItem> imageItems, String id, Uri img) {
 		final StorageReference imageRefothers = userRef.child(Constants.IMAGE_PATH_JOBS_OTHERS),
 				imageRefmain = userRef.child(Constants.IMAGE_PATH_JOBS_MAIN);
 
@@ -196,10 +210,10 @@ public class FirebaseAgent {
 				.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
 					@Override
 					public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-						if (task.isSuccessful()){
-							for (int i = 0; i < imageItems.size(); i++){
+						if (task.isSuccessful()) {
+							for (int i = 0; i < imageItems.size(); i++) {
 								ImageItem item = imageItems.get(i);
-								imageRefothers.child(item.getName()).putFile(item.getFileName())
+								imageRefothers.child(item.getName()).putFile(item.getFileName())//TODO change path to child('job_id/image_name')
 										.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
 											@Override
 											public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -222,10 +236,9 @@ public class FirebaseAgent {
 		});
 
 
-
 	}
 
-	public interface notifStatus{
+	public interface notifStatus {
 		void isNotifSent(Boolean status);
 	}
 
@@ -238,7 +251,7 @@ public class FirebaseAgent {
 				.addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
 					@Override
 					public void onComplete(@NonNull Task<DocumentReference> task) {
-						if (task.isSuccessful()){
+						if (task.isSuccessful()) {
 							cvRef.child(notification.getReceiver()).putFile(file)
 									.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
 										@Override
@@ -251,7 +264,7 @@ public class FirebaseAgent {
 									callback.isNotifSent(false);
 								}
 							});
-						}else {
+						} else {
 							callback.isNotifSent(false);
 						}
 					}
@@ -290,6 +303,7 @@ public class FirebaseAgent {
 	//update image
 	public interface isImageUpdated {
 		void isUpdated(Boolean status);
+
 		void progress(int progress);
 	}
 
@@ -300,19 +314,19 @@ public class FirebaseAgent {
 				.addOnCompleteListener(new OnCompleteListener<Void>() {
 					@Override
 					public void onComplete(@NonNull final Task<Void> task) {
-						if (task.isSuccessful()){
+						if (task.isSuccessful()) {
 							StorageReference profileRef = userRef.child(Constants.USER_PROFILE_IMAGE_PATH).child(uid);
 
 							profileRef.putFile(newFile)
 									.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
 										@Override
 										public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-											if (taskSnapshot != null){
+											if (taskSnapshot != null) {
 												docRef.update("image", uid)
 														.addOnCompleteListener(new OnCompleteListener<Void>() {
 															@Override
 															public void onComplete(@NonNull Task<Void> task) {
-																if (task.isSuccessful()){
+																if (task.isSuccessful()) {
 																	callback.isUpdated(true);
 																}
 															}
@@ -347,21 +361,21 @@ public class FirebaseAgent {
 	}
 
 	//upload image
-	public interface uploadListener{
+	public interface uploadListener {
 		void isUploaded(Boolean state);
 	}
 
 
-	public void uploadImage(String path, Uri file, final uploadListener callback){
+	public void uploadImage(String path, Uri file, final uploadListener callback) {
 		StorageReference jobRef = userRef.child(path).child(authManager.getCurrentUID());
 
 		jobRef.putFile(file)
 				.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
 					@Override
 					public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-						if (taskSnapshot != null){
+						if (taskSnapshot != null) {
 							callback.isUploaded(true);
-						}else {
+						} else {
 							callback.isUploaded(false);
 						}
 					}
@@ -414,7 +428,7 @@ public class FirebaseAgent {
 			@Override
 			public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
 
-				if (e != null){
+				if (e != null) {
 					Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
 				}
 
@@ -431,47 +445,42 @@ public class FirebaseAgent {
 	//download image
 	public interface OnImageDownload {
 		void isDownloaded(Boolean status, String url);
-
-		void isFailed(Boolean status);
 	}
 
 	public void downloadImage(String id, String path, final OnImageDownload callback) {
-		userRef.child(path).child(id).getDownloadUrl()
-				.addOnCompleteListener(new OnCompleteListener<Uri>() {
-					@Override
-					public void onComplete(@NonNull Task<Uri> task) {
-						if (task.isSuccessful()) {//url found
-							callback.isDownloaded(true, task.getResult().toString());
-							callback.isFailed(false);
-						} else {//url not found
-							callback.isFailed(true);
-							callback.isDownloaded(false, "");
+		if (path != null && id != null) {
+			userRef.child(path).child(id).getDownloadUrl()
+					.addOnCompleteListener(new OnCompleteListener<Uri>() {
+						@Override
+						public void onComplete(@NonNull Task<Uri> task) {
+							if (task.isSuccessful()) {
+								callback.isDownloaded(true, task.getResult().toString());
+							} else {
+								callback.isDownloaded(false, null);
+							}
 						}
-					}
-				}).addOnFailureListener(new OnFailureListener() {
-			@Override
-			public void onFailure(@NonNull Exception e) {
-				callback.isDownloaded(false, "");
-				callback.isFailed(true);
-			}
-		});
+					}).addOnFailureListener(new OnFailureListener() {
+				@Override
+				public void onFailure(@NonNull Exception e) {
+					callback.isDownloaded(false, null);
+				}
+			});
+		} else
+			Toast.makeText(context, "null parameters", Toast.LENGTH_SHORT).show();
 	}
 
-	public interface allUsersListener{
-		void userList(List<User> list);
-	}
 
-	public interface getJob{
+	public interface getJob {
 		void job(Job job);
 	}
 
-	public void getJobByID(String id, final getJob callback){
+	public void getJobByID(String id, final getJob callback) {
 		DocumentReference jobs = firestore.collection("jobs").document("category").collection("area").document(id);
 
 		jobs.addSnapshotListener(new EventListener<DocumentSnapshot>() {
 			@Override
 			public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
-				if (e != null && documentSnapshot.exists()){
+				if (e != null && documentSnapshot.exists()) {
 					Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
 				}
 
@@ -485,38 +494,118 @@ public class FirebaseAgent {
 		});
 	}
 
-	public interface getImageFromdBListener{
-		void downloadImg(String url);
+	//get job list
+	public interface jobList {
+		void jobList(List<Job> jobs, List<String> ids);
 	}
 
-	public void getImagefromDB(String path, final String iPath, final String id, final getImageFromdBListener callback){
-		firestore.collection("images").document(path).collection(id).document("main")
-				.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+	public void getNewJobs(final jobList callback) {
+		final List<Job> jobs = new ArrayList<>();
+		final List<String> ids = new ArrayList<>();
+		firestore.collection("jobs").document("category").collection("area")
+				.limit(3)
+				.addSnapshotListener(new EventListener<QuerySnapshot>() {
 					@Override
-					public void onEvent(DocumentSnapshot snapshot, FirebaseFirestoreException e) {
-						downloadImage(id, iPath, new OnImageDownload() {
-							@Override
-							public void isDownloaded(Boolean status, String url) {
-								if (url != null){
-									callback.downloadImg(url);
-								}
-							}
+					public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+						if (e != null)
+							return;
 
-							@Override
-							public void isFailed(Boolean status) {
-									callback.downloadImg(null);
-							}
-						});
+						for (DocumentChange change : documentSnapshots.getDocumentChanges()) {
+							if (change == null)
+								callback.jobList(null, null);
+
+							Job job = change.getDocument().toObject(Job.class);
+							jobs.add(job);
+							ids.add(change.getDocument().getId());
+						}
+						callback.jobList(jobs, ids);
+
 					}
 				});
 	}
 
+	public void getAllNewJobs(final jobList callback) {
+		final List<Job> jobs = new ArrayList<>();
+		final List<String> ids = new ArrayList<>();
+		firestore.collection("jobs").document("category").collection("area")
+				.addSnapshotListener(new EventListener<QuerySnapshot>() {
+					@Override
+					public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+						if (e != null)
+							return;
+
+						for (DocumentChange change : documentSnapshots.getDocumentChanges()) {
+							if (change == null)
+								callback.jobList(null, null);
+
+							Job job = change.getDocument().toObject(Job.class);
+							jobs.add(job);
+							ids.add(change.getDocument().getId());
+						}
+						callback.jobList(jobs, ids);
+
+					}
+				});
+	}
+
+	public void getAllJobsBCat(final jobList callback) {
+		final List<Job> jobs = new ArrayList<>();
+		final List<String> ids = new ArrayList<>();
+		firestore.collection("jobs").document("category").collection("area")
+				.addSnapshotListener(new EventListener<QuerySnapshot>() {
+					@Override
+					public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+						if (e != null)
+							return;
+
+						for (DocumentChange change : documentSnapshots.getDocumentChanges()) {
+							if (change == null)
+								callback.jobList(null, null);
+
+							Job job = change.getDocument().toObject(Job.class);
+							jobs.add(job);
+							ids.add(change.getDocument().getId());
+						}
+						callback.jobList(jobs, ids);
+
+					}
+				});
+	}
+
+	public void getAllJobsBLocation(final jobList callback) {
+		final List<Job> jobs = new ArrayList<>();
+		final List<String> ids = new ArrayList<>();
+		getUserByUID(authManager.getCurrentUID(), new getUser() {
+			@Override
+			public void gottenUser(User user) {
+				firestore.collection("jobs").document("category").collection("area")
+						.whereEqualTo("location", user.getCareer())
+						.addSnapshotListener(new EventListener<QuerySnapshot>() {
+							@Override
+							public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+								if (e != null)
+									return;
+
+								for (DocumentChange change : documentSnapshots.getDocumentChanges()) {
+									Job job = change.getDocument().toObject(Job.class);
+									jobs.add(job);
+									ids.add(change.getDocument().getId());
+
+								}
+								callback.jobList(jobs, ids);
+
+							}
+						});
+			}
+		});
+	}
+
 	//duty status
-	public interface dutyStatusListener{
+	public interface dutyStatusListener {
 		void isOnDuty(Boolean working);
 	}
 
-	public void getDutyStatus(final dutyStatusListener callback){
+	public void getDutyStatus(final dutyStatusListener callback) {
 		firestore.collection("duty")
 				.addSnapshotListener(new EventListener<QuerySnapshot>() {
 					@Override
@@ -524,10 +613,10 @@ public class FirebaseAgent {
 						if (e != null)
 							return;
 
-						for (DocumentSnapshot snapshot : documentSnapshots){
-							if (snapshot.getBoolean(authManager.getCurrentUID())){
+						for (DocumentSnapshot snapshot : documentSnapshots) {
+							if (snapshot.getBoolean(authManager.getCurrentUID())) {
 								callback.isOnDuty(true);
-							}else {
+							} else {
 								callback.isOnDuty(false);
 							}
 						}
@@ -536,4 +625,114 @@ public class FirebaseAgent {
 				});
 	}
 
+	public void setDutyStatus(final Boolean status) {
+		Map<String, Boolean> duty = new HashMap<>();
+		duty.put(authManager.getCurrentUID(), status);
+		firestore.collection("duty").document(authManager.getCurrentUID()).set(duty);
+	}
+
+	public interface Counts {
+		void jobCount(int count);
+	}
+
+	public void getCounts(final Counts callback) {
+
+		//job jobCount
+		firestore.collection("jobs").document("category").collection("area")
+				.addSnapshotListener(new EventListener<QuerySnapshot>() {
+					@Override
+					public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+						if (e != null)
+							Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+
+						int count = 0;
+						for (DocumentSnapshot snapshot : documentSnapshots) {
+							count++;
+							callback.jobCount(count);
+						}
+
+					}
+				});
+
+
+		//application jobCount
+
+	}
+
+	//raring
+	public interface Review {
+		void review(Rating rating);
+	}
+
+	public void getRating(final Review callcack) {
+		firestore.collection("rating").document(authManager.getCurrentUID())
+				.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+					@Override
+					public void onEvent(DocumentSnapshot snapshot, FirebaseFirestoreException e) {
+						if (e != null)
+							return;
+
+
+						Rating rating = snapshot.toObject(Rating.class);
+						callcack.review(rating);
+					}
+				});
+	}
+
+
+	public void updateUserLocation(Loc latLng) {
+		if (latLng == null) {
+			Toast.makeText(context, "location not being found", Toast.LENGTH_SHORT).show();
+		}
+
+		firestore.collection("location").document(latLng.getUid())
+				.set(latLng)
+				.addOnCompleteListener(new OnCompleteListener<Void>() {
+					@Override
+					public void onComplete(@NonNull Task<Void> task) {
+						if (task.isSuccessful()) {
+							Toast.makeText(context, "location updated", Toast.LENGTH_SHORT).show();
+						}
+					}
+				}).addOnFailureListener(new OnFailureListener() {
+			@Override
+			public void onFailure(@NonNull Exception e) {
+				Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+
+	public interface imLocatedAt {
+		void location(Loc latLng);
+	}
+
+	public void getCurrentLocation(final String uid, final imLocatedAt callback) {
+		DocumentReference location = firestore.collection("location").document(uid);
+		location.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+			@Override
+			public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+				if (task.isSuccessful()) {
+					DocumentSnapshot snapshot = task.getResult();
+					if (snapshot.exists()) {
+						Loc loc = snapshot.toObject(Loc.class);
+						callback.location(loc);
+					}
+				} else {
+					callback.location(null);
+				}
+			}
+		}).addOnFailureListener(new OnFailureListener() {
+			@Override
+			public void onFailure(@NonNull Exception e) {
+				callback.location(null);
+			}
+		});
+
+	}
+
+	public interface getAllJobIds {
+		void jobIds(List<String> ids);
+	}
+
 }
+

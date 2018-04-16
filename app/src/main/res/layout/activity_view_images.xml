@@ -22,7 +22,7 @@
             android:fontFamily="@font/roboto_medium"
             android:text="Total : 15"
             android:textColor="#000"
-            android:id="@+id/count"/>
+            android:id="@+id/jobCount"/>
 
     </RelativeLayout>
 

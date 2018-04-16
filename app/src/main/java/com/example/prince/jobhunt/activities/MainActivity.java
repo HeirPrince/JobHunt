@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         auth = FirebaseAuth.getInstance();
-        idManager = new AuthManager(this);
+        idManager = new AuthManager();
         agent = new FirebaseAgent(this);
 
         //checking if a user is authenticated
@@ -42,11 +42,12 @@ public class MainActivity extends AppCompatActivity {
             agent.checkIfUserExists(auth.getCurrentUser().getUid(), new FirebaseAgent.isUserRegistered() {
                 @Override
                 public void isRegistered(Boolean status, DocumentSnapshot ds) {
-                    if (status){
-                        if (ds != null){
+                    if (status) {
+                        if (ds != null) {
                             finish();
+                            agent.setDutyStatus(false);
                             startActivity(new Intent(MainActivity.this, Home.class));
-                        }else {
+                        } else {
                             startActivity(new Intent(MainActivity.this, Register.class));
                         }
                     }else {

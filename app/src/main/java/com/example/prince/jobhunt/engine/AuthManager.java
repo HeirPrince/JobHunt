@@ -1,7 +1,5 @@
 package com.example.prince.jobhunt.engine;
 
-import android.content.Context;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -11,12 +9,11 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class AuthManager {
 
-    private Context ctx;
     private FirebaseAuth auth;
     private FirebaseUser user;
 
-    public AuthManager(Context ctx) {
-        this.ctx = ctx;
+    public AuthManager() {
+
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
     }

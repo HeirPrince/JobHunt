@@ -25,5 +25,8 @@
         <item>To Everyone</item>
         <item>Applicants</item>
     </string-array>
+    <string name="title_activity_maps">Map</string>
+    <string name="google_maps_key">AIzaSyD_gNtK9mJ51V7xKHOKKgTbRTgjo2tyNiw</string>
+    <string name="title_activity_more_new">More New Jobs</string>
 
 </resources>

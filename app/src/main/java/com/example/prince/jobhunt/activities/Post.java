@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import com.example.prince.jobhunt.R;
 import com.example.prince.jobhunt.engine.FirebaseAgent;
+import com.example.prince.jobhunt.engine.StorageService;
+import com.example.prince.jobhunt.engine.TimeUtils;
 import com.example.prince.jobhunt.model.ImageItem;
 import com.example.prince.jobhunt.model.Job;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,6 +28,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.theartofdev.edmodo.cropper.CropImage;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,7 +40,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class Post extends AppCompatActivity {
+public class Post extends AppCompatActivity implements StorageService {
 
 	public static final int GALLERY_CODE = 123;
 	private static final int REQUEST_CODE = 12;
@@ -56,6 +61,7 @@ public class Post extends AppCompatActivity {
 	private FirebaseAuth auth;
 	private FirebaseUser user;
 	private FirebaseAgent agent;
+	private TimeUtils timeUtils;
 
 	private Uri file, cropped;
 	private List<String> categories;
@@ -77,7 +83,7 @@ public class Post extends AppCompatActivity {
 		agent = new FirebaseAgent(this);
 		job = new Job();
 		imageItems = new ArrayList<>();
-
+		timeUtils = new TimeUtils();
 		if (user != null) {
 			setLists();
 		}else {
@@ -113,12 +119,24 @@ public class Post extends AppCompatActivity {
 		job.setTitle(postTitle.getText().toString());
 		job.setImage(getFileName(cropped));
 
+		//add timestammp
+		String timeStamp = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) + "";
+		job.setTimeStamp(timeStamp);
 
-		//TODO ask, if not needed/forgot("pop up dialog to remind") just save them
+        //TODO ask, if not needed/forgot("pop up dialog to remind") just save them
 		if (imageItems != null){
 			agent.addJob(job, file, imageItems);
 		}else {
 			Toast.makeText(this, "add images first", Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	@Subscribe
+	public void imageUploaded(Boolean state){
+		if (state){
+			Toast.makeText(this, "IMAGE UPLOADED", Toast.LENGTH_SHORT).show();
+		}else {
+			Toast.makeText(this, "UPLOAD FAILED", Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -136,8 +154,6 @@ public class Post extends AppCompatActivity {
 				addTODB();
 				break;
 		}
-
-
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -192,11 +208,10 @@ public class Post extends AppCompatActivity {
 					String fileName = getFileName(uri);
 
 					//timestamp
-					String ts = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) + "";
 					ImageItem item = new ImageItem();
 					item.setFileName(uri);
 					item.setName(fileName);
-					item.setTimestamp(ts);
+					item.setTimestamp(timeUtils.generateTimeStamp());
 
 					imageItems.add(item);
 
@@ -252,4 +267,23 @@ public class Post extends AppCompatActivity {
 		return result;
 	}
 
+	@Override
+	public void uploadComplete(Boolean status) {
+		if (status){
+			Toast.makeText(this, "image uploaded successfully from interface", Toast.LENGTH_SHORT).show();
+		}else
+			Toast.makeText(this, "upload failed", Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		EventBus.getDefault().register(this);
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		EventBus.getDefault().unregister(this);
+	}
 }

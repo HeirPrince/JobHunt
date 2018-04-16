@@ -11,19 +11,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.prince.jobhunt.Adapters.UserAdapter;
 import com.example.prince.jobhunt.R;
 import com.example.prince.jobhunt.engine.AuthManager;
 import com.example.prince.jobhunt.engine.FirebaseAgent;
-import com.example.prince.jobhunt.model.User;
-import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -53,7 +44,7 @@ public class Search extends Fragment {
 	public Search() {
 		// Required empty public constructor
 		agent = new FirebaseAgent(getContext());
-		authManager = new AuthManager(getContext());
+		authManager = new AuthManager();
 		database = FirebaseFirestore.getInstance();
 	}
 
@@ -78,26 +69,7 @@ public class Search extends Fragment {
 	}
 
 	public void popList(){
-		final List<User> users = new ArrayList<>();
-		database.collection("users").addSnapshotListener(new EventListener<QuerySnapshot>() {
-			@Override
-			public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-				if (e != null){
-					//error
-					progressBar.setVisibility(View.GONE);
-				}
 
-				for (DocumentChange doc : documentSnapshots.getDocumentChanges()){
-					progressBar.setVisibility(View.GONE);
-					User user = doc.getDocument().toObject(User.class);
-					users.add(user);
-				}
-
-			}
-		});
-
-		UserAdapter adapter = new UserAdapter(users, getContext());
-		userList.setAdapter(adapter);
 	}
 
 	public class UserHolder extends RecyclerView.ViewHolder {

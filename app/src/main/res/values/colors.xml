@@ -12,4 +12,5 @@
     <color name="card_item_icon_color">#424242</color>
     <color name="colorWhite">#fff</color>
     <color name="colorLighterGrey">#fafafa</color>
+    <color name="colorBlack">#000</color>
 </resources>

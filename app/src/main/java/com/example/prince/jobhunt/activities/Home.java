@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -20,10 +21,11 @@ import android.widget.Toast;
 
 import com.example.prince.jobhunt.R;
 import com.example.prince.jobhunt.engine.FirebaseAgent;
+import com.example.prince.jobhunt.engine.LocationServer;
 import com.example.prince.jobhunt.engine.NonSwipableViewPager;
 import com.example.prince.jobhunt.engine.onSearchQueryListener;
+import com.example.prince.jobhunt.fragments.NewJobs;
 import com.example.prince.jobhunt.fragments.Notifications;
-import com.example.prince.jobhunt.fragments.Jobs;
 import com.example.prince.jobhunt.fragments.Profile;
 import com.example.prince.jobhunt.fragments.Search;
 import com.firebase.ui.auth.AuthUI;
@@ -47,11 +49,14 @@ public class Home extends AppCompatActivity {
     @BindView(R.id.fab_menu)FloatingActionButton fab;
     @BindView(R.id.bnve)BottomNavigationViewEx bnv;
     @BindView(R.id.pager)NonSwipableViewPager pager;
+    private SlideAdapter adapter;
+    private TabLayout mTabLayout;
 
     private FirebaseAuth auth;
     private FirebaseUser active_user;
     private FirebaseAgent agent;
     onSearchQueryListener callback;
+    private LocationServer locationServer;
 
 
     @Override
@@ -62,12 +67,15 @@ public class Home extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         active_user = auth.getCurrentUser();
         agent = new FirebaseAgent(this);
+        locationServer = new LocationServer(this);
+        adapter = new SlideAdapter(getSupportFragmentManager());
 
         //check authentication
         if (active_user != null){
             //authenticated
             setBottomNavigation();
             uiStuff();
+            locationServer.updateUserLocation();
         }else {
             //registration
             finish();
@@ -76,7 +84,7 @@ public class Home extends AppCompatActivity {
 
     }
 
-    public void uiStuff(){
+    public void uiStuff() {
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -85,18 +93,21 @@ public class Home extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                switch (position){
+                switch (position) {
                     case 0:
                         fab.setVisibility(View.VISIBLE);
                         getSupportActionBar().show();
+                        getSupportActionBar().setTitle("Jobs");
                         break;
                     case 1:
                         fab.setVisibility(View.GONE);
                         getSupportActionBar().show();
+                        getSupportActionBar().setTitle("Notifications");
                         break;
                     case 2:
                         fab.setVisibility(View.GONE);
                         getSupportActionBar().show();
+                        getSupportActionBar().setTitle("Search");
                         break;
                     case 3:
                         fab.setVisibility(View.GONE);
@@ -125,7 +136,7 @@ public class Home extends AppCompatActivity {
 
     public void setupToolbar(){
         setSupportActionBar(toolbar);
-        //set paddin
+        //set padding
 
         // create our manager instance after the content view is set
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
@@ -150,7 +161,7 @@ public class Home extends AppCompatActivity {
         bnv.enableItemShiftingMode(true);
 
         SlideAdapter adapter = new SlideAdapter(getSupportFragmentManager());
-        adapter.addFragment(new Jobs());
+        adapter.addFragment(new NewJobs());
         adapter.addFragment(new Notifications());
         adapter.addFragment(new Search());
         adapter.addFragment(new Profile());
@@ -258,6 +269,7 @@ public class Home extends AppCompatActivity {
     }
 
     //interfaces
+
     public void onSearch(onSearchQueryListener listener){
         callback = listener;
     }

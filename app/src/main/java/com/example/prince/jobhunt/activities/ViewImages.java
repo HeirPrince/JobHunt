@@ -15,7 +15,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.prince.jobhunt.Adapters.UploadImagesAdapter;
+import com.example.prince.jobhunt.ViewHolders.UploadImagesAdapter;
 import com.example.prince.jobhunt.R;
 import com.example.prince.jobhunt.model.ImageItem;
 import com.google.android.gms.tasks.OnFailureListener;

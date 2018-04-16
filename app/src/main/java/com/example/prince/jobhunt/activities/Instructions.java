@@ -31,7 +31,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -78,7 +77,7 @@ public class Instructions extends AppCompatActivity {
 		setPickers();
 
 		firestore = FirebaseFirestore.getInstance();
-		authManager = new AuthManager(this);
+		authManager = new AuthManager();
 		agent = new FirebaseAgent(this);
 
 
@@ -163,16 +162,16 @@ public class Instructions extends AppCompatActivity {
 
 						end_date.setText(day + "/ " + month + "/ " + year);
 
-//						if (!start_date.getText().toString().equals("")){
-//							if (checkDate(start_date.getText().toString(), end_date.getText().toString())){
-//
-//								Toast.makeText(Instructions.this, "ok", Toast.LENGTH_SHORT).show();
-//							}else {
-//								Toast.makeText(Instructions.this, "greater than date 2", Toast.LENGTH_SHORT).show();
-//							}
-//						}else {
-//							return;
-//						}
+						if (!start_date.getText().toString().equals("")){
+							if (checkDate(start_date.getText().toString(), end_date.getText().toString())){
+
+								Toast.makeText(Instructions.this, "past", Toast.LENGTH_SHORT).show();
+							}else {
+								Toast.makeText(Instructions.this, "future", Toast.LENGTH_SHORT).show();
+							}
+						}else {
+							return;
+						}
 
 					}
 				}, year, month, day);
@@ -225,26 +224,28 @@ public class Instructions extends AppCompatActivity {
 
 	public boolean checkDate(String s_date, String e_date) {
 		boolean isPast = false;
+
+		String date = s_date;
+		String dateAfter = e_date;
+
+		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy hh:mm");
+		Date cdate;
+		Date cdateAfter;
+
+
 		try {
-			SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-			Date date1 = format.parse(s_date);
-			Date date2 = format.parse(e_date);
+			cdate = format.parse(date);
+			cdateAfter = format.parse(dateAfter);
 
-			Calendar calendar = new GregorianCalendar();
-			calendar.setTime(date1);
-
-			Calendar calendar2 = new GregorianCalendar();
-			calendar.setTime(date2);
-
-			if (calendar.after(calendar2)) {
-				return false;
-			} else {
+			if (cdate.after(cdateAfter)){
 				return true;
+			}else {
+				return false;
 			}
+
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-
 		return false;
 	}
 

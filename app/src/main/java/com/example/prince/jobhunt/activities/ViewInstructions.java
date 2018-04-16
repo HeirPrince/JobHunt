@@ -45,7 +45,7 @@ public class ViewInstructions extends AppCompatActivity {
 		ButterKnife.bind(this);
 
 		agent = new FirebaseAgent(this);
-		authManager = new AuthManager(this);
+		authManager = new AuthManager();
 		firestore = FirebaseFirestore.getInstance();
 
 		setViews();

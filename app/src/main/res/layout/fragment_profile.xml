@@ -95,6 +95,7 @@
                         android:textColor="@color/colorPrimaryText"
                         android:textStyle="bold"
                         android:text="789"
+                        android:id="@+id/job_count"
                         android:layout_gravity="center_horizontal"/>
 
                     <TextView
@@ -120,12 +121,13 @@
                         android:textColor="@color/colorPrimaryText"
                         android:textStyle="bold"
                         android:text="2k"
+                        android:id="@+id/app_count"
                         android:layout_gravity="center_horizontal"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Followers"
+                        android:text="Applications"
                         android:textSize="15sp"
                         android:layout_gravity="center_horizontal"/>
 
@@ -168,11 +170,12 @@
         android:layout_height="match_parent"
         android:layout_below="@id/appbar">
 
-        <TextView
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Coming Soon"/>
+            android:text="My Jobs"
+            android:id="@+id/my_activity"/>
 
     </RelativeLayout>
 

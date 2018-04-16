@@ -12,7 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.prince.jobhunt.R;
@@ -20,6 +22,7 @@ import com.example.prince.jobhunt.engine.AuthManager;
 import com.example.prince.jobhunt.engine.Constants;
 import com.example.prince.jobhunt.engine.FirebaseAgent;
 import com.example.prince.jobhunt.model.Application;
+import com.example.prince.jobhunt.model.Rating;
 import com.example.prince.jobhunt.model.User;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -54,7 +57,7 @@ public class viewApplications extends AppCompatActivity {
 
 		firestore = FirebaseFirestore.getInstance();
 		agent = new FirebaseAgent(this);
-		authManager = new AuthManager(this);
+		authManager = new AuthManager();
 
 		job_id = getIntent().getStringExtra("job_id");
 		progressBar.setVisibility(View.VISIBLE);
@@ -100,20 +103,21 @@ public class viewApplications extends AppCompatActivity {
 																.into(holder.user_profile);
 													}
 												}
-
-												@Override
-												public void isFailed(Boolean status) {
-
-												}
 											});
 										} else {
 											//no image set default image
 										}
 									}
 
+								});
+								agent.getRating(new FirebaseAgent.Review() {
 									@Override
-									public void isFailed(Boolean status) {
-
+									public void review(Rating rating) {
+										if (rating == null) {
+											Toast.makeText(viewApplications.this, "neya", Toast.LENGTH_SHORT).show();
+										}else{
+											holder.ratingBar.setRating((float) rating.getNmStars());
+										}
 									}
 								});
 							} else {
@@ -159,6 +163,7 @@ public class viewApplications extends AppCompatActivity {
 		public TextView user_name, user_career, app_desc, p_salary;
 		public CircleImageView user_profile;
 		public Button accept;
+		public RatingBar ratingBar;
 
 		public ApplicationHolder(View itemView) {
 			super(itemView);
@@ -168,6 +173,7 @@ public class viewApplications extends AppCompatActivity {
 			p_salary = itemView.findViewById(R.id.p_salary);
 			accept = itemView.findViewById(R.id.accept);
 			user_profile = itemView.findViewById(R.id.user_photo);
+			ratingBar = itemView.findViewById(R.id.ratingBar);
 		}
 	}
 

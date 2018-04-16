@@ -64,7 +64,7 @@ public class Notifications extends Fragment {
 		// Required empty public constructor
 		database = FirebaseFirestore.getInstance();
 		agnt = new FirebaseAgent(getContext());
-		authManager = new AuthManager(getContext());
+		authManager = new AuthManager();
 	}
 
 
@@ -146,11 +146,6 @@ public class Notifications extends Fragment {
 							public void isDownloaded(Boolean status, String url) {
 								holder.setUser(user.getUsername(), user.getCareer(), url);
 								holder.setNotif(model.getMessage());
-							}
-
-							@Override
-							public void isFailed(Boolean status) {
-								//default image
 							}
 						});
 					}

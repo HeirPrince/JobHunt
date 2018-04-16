@@ -41,7 +41,7 @@ public class addWork extends AppCompatActivity {
 		ButterKnife.bind(this);
 		setupToolbar();
 
-		authManager = new AuthManager(this);
+		authManager = new AuthManager();
 		agent = new FirebaseAgent(this);
 
 		setupProfile();
@@ -71,11 +71,6 @@ public class addWork extends AppCompatActivity {
 						Glide.with(addWork.this)
 								.load(url)
 								.into(profile_photo);
-					}
-
-					@Override
-					public void isFailed(Boolean status) {
-
 					}
 				});
 			}

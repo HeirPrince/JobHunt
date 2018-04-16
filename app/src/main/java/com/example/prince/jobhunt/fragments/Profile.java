@@ -8,11 +8,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.prince.jobhunt.R;
+import com.example.prince.jobhunt.activities.MyActivity;
 import com.example.prince.jobhunt.activities.edit_Profile;
 import com.example.prince.jobhunt.engine.Constants;
 import com.example.prince.jobhunt.engine.FirebaseAgent;
@@ -29,10 +30,11 @@ public class Profile extends Fragment {
     private int page;
     private String title;
 
-    private TextView profile_name, profile_email, profile_desc, duty;
+    private TextView profile_name, profile_email, profile_desc, duty, job_count, app_count;
     private CircleImageView profile_photo;
     private AppBarLayout appbar;
     private View edit_p;
+    private Button my_activity;
 
     private FirebaseAgent agent;
     private FirebaseAuth auth;
@@ -66,11 +68,20 @@ public class Profile extends Fragment {
         edit_p = v.findViewById(R.id.edit_profile);
         appbar = v.findViewById(R.id.appbar);
         duty = v.findViewById(R.id.duty);
-
+        job_count = v.findViewById(R.id.job_count);
+        app_count = v.findViewById(R.id.app_count);
+        my_activity = v.findViewById(R.id.my_activity);
         edit_p.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getContext(), edit_Profile.class));
+            }
+        });
+
+        my_activity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(), MyActivity.class));
             }
         });
 
@@ -96,6 +107,8 @@ public class Profile extends Fragment {
                             Glide.with(getActivity())
                                     .load(url)
                                     .into(profile_photo);
+
+                            //duty
                             agent.getDutyStatus(new FirebaseAgent.dutyStatusListener() {
                                 @Override
                                 public void isOnDuty(Boolean working) {
@@ -106,12 +119,15 @@ public class Profile extends Fragment {
                                     }
                                 }
                             });
-                        }
-                    }
 
-                    @Override
-                    public void isFailed(Boolean status) {
-                        Toast.makeText(getContext(), "image can't be downloaded", Toast.LENGTH_SHORT).show();
+                           //job jobCount
+                            agent.getCounts(new FirebaseAgent.Counts() {
+                                @Override
+                                public void jobCount(int count) {
+                                    job_count.setText(String.valueOf(count));
+                                }
+                            });
+                        }
                     }
                 });
             }

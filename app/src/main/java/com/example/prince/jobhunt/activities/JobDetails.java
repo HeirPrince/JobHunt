@@ -52,7 +52,7 @@ public class JobDetails extends AppCompatActivity {
 		agent = new FirebaseAgent(this);
 		dialogHelper = new DialogHelper(this);
 		firestore = FirebaseFirestore.getInstance();
-		authManager = new AuthManager(this);
+		authManager = new AuthManager();
 		id = getIntent().getStringExtra("job_id");
 
 		setupViews();
@@ -74,11 +74,6 @@ public class JobDetails extends AppCompatActivity {
 								Glide.with(JobDetails.this)
 										.load(url)
 										.into(pic);
-							}
-
-							@Override
-							public void isFailed(Boolean status) {
-
 							}
 						});
 					}
@@ -102,11 +97,6 @@ public class JobDetails extends AppCompatActivity {
 						} else {
 							//no image set default image
 						}
-					}
-
-					@Override
-					public void isFailed(Boolean status) {
-
 					}
 				});
 

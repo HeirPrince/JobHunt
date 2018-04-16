@@ -49,7 +49,7 @@ public class AddApplication extends AppCompatActivity {
 		agent = new FirebaseAgent(this);
 		dialogHelper = new DialogHelper(this);
 		firestore = FirebaseFirestore.getInstance();
-		authManager = new AuthManager(this);
+		authManager = new AuthManager();
 	}
 
 	public void Apply(View view) {

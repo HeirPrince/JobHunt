@@ -52,7 +52,7 @@ public class edit_Profile extends AppCompatActivity {
 		setSupportActionBar(toolbar);
 
 		agent = new FirebaseAgent(this);
-		authManager = new AuthManager(this);
+		authManager = new AuthManager();
 		initViews();
 
 		load.setOnClickListener(new View.OnClickListener() {
@@ -86,11 +86,6 @@ public class edit_Profile extends AppCompatActivity {
 									.load(url)
 									.into(profile_photo);
 						}
-					}
-
-					@Override
-					public void isFailed(Boolean status) {
-						Toast.makeText(edit_Profile.this, "image can't be downloaded", Toast.LENGTH_SHORT).show();
 					}
 				});
 			}
