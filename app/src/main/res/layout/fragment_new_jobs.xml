@@ -1,20 +1,18 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite"
-    tools:context="com.example.prince.jobhunt.fragments.NewJobs">
+    android:orientation="vertical">
 
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:id="@+id/progress"
-        android:visibility="visible"/>
 
-    <android.support.v7.widget.RecyclerView
+    <com.tabassum.shimmerRecyclerView.ShimmerRecyclerView
+        android:id="@+id/job_list"
+        android:background="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/new_list"/>
+        app:demo_layout="@layout/item_image_shimmer_view"
+        app:demo_layout_manager_type="linear_vertical"/>
 
-</FrameLayout>
+</LinearLayout>

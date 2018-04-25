@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.prince.jobhunt.R;
+import com.example.prince.jobhunt.engine.AuthManager;
 import com.example.prince.jobhunt.engine.FirebaseAgent;
 import com.example.prince.jobhunt.engine.StorageService;
 import com.example.prince.jobhunt.engine.TimeUtils;
@@ -67,6 +68,7 @@ public class Post extends AppCompatActivity implements StorageService {
 	private List<String> categories;
 	private List<String> paymentTypes;
 	private Job job;
+	private AuthManager authManager;
 
 
 	@Override
@@ -84,6 +86,7 @@ public class Post extends AppCompatActivity implements StorageService {
 		job = new Job();
 		imageItems = new ArrayList<>();
 		timeUtils = new TimeUtils();
+		authManager = new AuthManager();
 		if (user != null) {
 			setLists();
 		}else {
@@ -109,9 +112,8 @@ public class Post extends AppCompatActivity implements StorageService {
 	}
 
 	public void addTODB(){
-		Toast.makeText(this, "yeah", Toast.LENGTH_SHORT).show();
 		job.setCategory(categories.get(postCategory.getSelectedIndex()));
-		job.setOwner(user.getUid());
+		job.setOwner(authManager.getCurrentUID());
 		job.setDesc(postDescription.getText().toString());
 		job.setLocation(postLocation.getText().toString());
 		job.setSalary(Integer.valueOf(postSalary.getText().toString()));

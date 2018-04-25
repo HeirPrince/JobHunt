@@ -2,19 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/send"
-        android:title="Jobs"
-        android:icon="@drawable/job"/>
+        android:title=""
+        android:icon="@drawable/job"
+        android:checked="true"/>
 
     <item android:id="@+id/nearby"
-        android:title="Nearby"
+        android:title=""
         android:icon="@drawable/nearby"/>
 
+    <item android:id="@+id/newJob"
+        android:title="" />
+
     <item android:id="@+id/search"
-        android:title="Search"
+        android:title=""
         android:icon="@drawable/search"/>
 
     <item android:id="@+id/profile"
-        android:title="Profile"
+        android:title=""
         android:icon="@drawable/profile"/>
 
 </menu>

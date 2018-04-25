@@ -13,7 +13,6 @@ import com.example.prince.jobhunt.engine.Constants;
 import com.example.prince.jobhunt.engine.FirebaseAgent;
 import com.example.prince.jobhunt.engine.TimeUtils;
 import com.example.prince.jobhunt.model.Job;
-import com.example.prince.jobhunt.model.User;
 
 import java.util.List;
 
@@ -54,12 +53,7 @@ public class JobAdapter extends RecyclerView.Adapter<JobViewHolder>{
 		agnt.downloadImage(id, Constants.IMAGE_PATH_JOBS_MAIN, new FirebaseAgent.OnImageDownload() {
 			@Override
 			public void isDownloaded(Boolean status, final String url) {
-				agnt.getUserByUID(model.getOwner(), new FirebaseAgent.getUser() {
-					@Override
-					public void gottenUser(User user) {
-						holder.setJob(model, url, user.getUsername());
-					}
-				});
+				holder.setJob(model, url);
 			}
 		});
 

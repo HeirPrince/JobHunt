@@ -1,6 +1,7 @@
 package com.example.prince.jobhunt.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.NestedScrollView;
@@ -9,12 +10,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.adityaarora.liveedgedetection.activity.ScanActivity;
+import com.adityaarora.liveedgedetection.constants.ScanConstants;
+import com.adityaarora.liveedgedetection.util.ScanUtils;
+import com.adityaarora.liveedgedetection.view.TouchImageView;
 import com.bumptech.glide.Glide;
 import com.example.prince.jobhunt.MoreImageAdapter;
 import com.example.prince.jobhunt.R;
@@ -35,12 +39,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class JobInfo extends AppCompatActivity {
 
+	public static final int REQUEST_CODE = 123;
+	String job_id;
 	private FirebaseAgent agent;
 	private AuthManager authManager;
 	private MoreImageAdapter adapter;
 	private FirebaseFirestore database;
 	@BindView(R.id.toolbar)Toolbar toolbar;
-	@BindView(R.id.toolbarImage)ImageView toolbarImage;
+	@BindView(R.id.toolbarImage)TouchImageView toolbarImage;
 	@BindView(R.id.collapse)CollapsingToolbarLayout collapse;
 	@BindView(R.id.progress)ProgressBar progressBar;
 	@BindView(R.id.nested)NestedScrollView nestedScrollView;
@@ -56,7 +62,6 @@ public class JobInfo extends AppCompatActivity {
 	@BindView(R.id.location)TextView job_location;
 	@BindView(R.id.locate)View locate;
 
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -66,13 +71,12 @@ public class JobInfo extends AppCompatActivity {
 		authManager = new AuthManager();
 		database = FirebaseFirestore.getInstance();
 		setSupportActionBar(toolbar);
+		job_id = getIntent().getStringExtra("job_id");
 		setViews();
 	}
 
 
 	public void setViews(){
-
-		final String job_id = getIntent().getStringExtra("job_id");
 
 		progressBar.setVisibility(View.VISIBLE);
 		contents.setVisibility(View.GONE);
@@ -136,5 +140,19 @@ public class JobInfo extends AppCompatActivity {
 				Toast.makeText(JobInfo.this, item.getName(), Toast.LENGTH_SHORT).show();
 			}
 		});
+	}
+
+	public void scanCv(View view) {
+		startActivityForResult(new Intent(this, ScanActivity.class), REQUEST_CODE);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
+			String filePath = data.getExtras().getString(ScanConstants.SCANNED_RESULT);
+			Bitmap baseBitmap = ScanUtils.decodeBitmapFromFile(filePath, ScanConstants.IMAGE_NAME);
+			toolbarImage.setImageBitmap(baseBitmap);
+		}
 	}
 }

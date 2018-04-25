@@ -9,9 +9,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.prince.jobhunt.R;
+import com.example.prince.jobhunt.engine.FirebaseAgent;
 import com.example.prince.jobhunt.engine.ImageUtils;
 import com.example.prince.jobhunt.engine.TimeUtils;
 import com.example.prince.jobhunt.model.Job;
+import com.example.prince.jobhunt.model.User;
 import com.github.thunder413.datetimeutils.DateTimeUtils;
 
 /**
@@ -24,6 +26,7 @@ public class JobViewHolder extends RecyclerView.ViewHolder{
 	private Context ctx;
 	private ImageUtils imageUtils;
 	private TimeUtils timeUtils;
+	private FirebaseAgent agent;
 
 	public JobViewHolder(View itemView, Context ctx) {
 		super(itemView);
@@ -35,13 +38,20 @@ public class JobViewHolder extends RecyclerView.ViewHolder{
 		this.ctx = ctx;
 		this.imageUtils = new ImageUtils();
 		this.timeUtils = new TimeUtils();
+		agent = new FirebaseAgent(ctx);
 	}
 
-	public void setJob(Job job, String jobimg, String username) {
-		user_name.setText(username);
+	public void setJob(Job job, String jobimg) {
+		agent.getUserByUID(job.getOwner(), new FirebaseAgent.getUser() {
+			@Override
+			public void gottenUser(User user) {
+				user_name.setText(user.getUsername());
+			}
+		});
 		job_title.setText(job.getTitle());
+		job_location.setText(job.getLocation());
 		if (jobimg != null){
-			imageUtils.darkenImage(big_image);
+//			imageUtils.darkenImage(big_image);
 			Glide.with(ctx).load(jobimg).into(big_image);
 		}else
 			Toast.makeText(ctx, "no image found", Toast.LENGTH_SHORT).show();

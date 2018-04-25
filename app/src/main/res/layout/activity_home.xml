@@ -7,24 +7,29 @@
     android:layout_height="match_parent"
     tools:context="com.example.prince.jobhunt.activities.Home">
 
-    <include layout="@layout/toolbar_home" />
+    <include layout="@layout/toolbar_home"/>
 
     <com.example.prince.jobhunt.engine.NonSwipableViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/pager"
+        android:layout_below="@+id/toolbar_home"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar_home"
+        android:background="@color/colorWhite"
         android:layout_above="@+id/bnve"/>
 
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_margin="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:src="@drawable/job"
+        android:layout_marginBottom="16dp"
         android:id="@+id/fab_menu"
-        android:layout_above="@+id/bnve"/>
+        android:tint="@color/colorPrimary"
+        app:backgroundTint="@android:color/white"
+        app:borderWidth="0dp"
+        app:elevation="9dp"/>
 
     <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
         android:id="@+id/bnve"

@@ -28,5 +28,8 @@
     <string name="title_activity_maps">Map</string>
     <string name="google_maps_key">AIzaSyD_gNtK9mJ51V7xKHOKKgTbRTgjo2tyNiw</string>
     <string name="title_activity_more_new">More New Jobs</string>
+    <string name="pref_key_transition_time" translatable="false">pref_key_transition_time</string>
+    <string name="button_ok">RETRY</string>
+    <string name="loading">Please wait</string>
 
 </resources>

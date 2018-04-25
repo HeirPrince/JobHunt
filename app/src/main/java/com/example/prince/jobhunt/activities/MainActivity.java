@@ -1,19 +1,26 @@
 package com.example.prince.jobhunt.activities;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.example.prince.jobhunt.ApplicationHelper;
 import com.example.prince.jobhunt.R;
 import com.example.prince.jobhunt.engine.AuthManager;
 import com.example.prince.jobhunt.engine.FirebaseAgent;
+import com.example.prince.jobhunt.engine.listeners.OnObjectExitListener;
+import com.example.prince.jobhunt.model.User;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUserMetadata;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Arrays;
 
@@ -26,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private AuthManager idManager;
     private FirebaseAgent agent;
     private FirebaseAuth auth;
+    public ProgressDialog progressDialog;
 
 
     @Override
@@ -35,29 +43,30 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         auth = FirebaseAuth.getInstance();
         idManager = new AuthManager();
-        agent = new FirebaseAgent(this);
+        progressDialog = new ProgressDialog(this);
+        agent = ApplicationHelper.getFirebaseAgent();
 
-        //checking if a user is authenticated
-        if (idManager.checkAuth()){
-            agent.checkIfUserExists(auth.getCurrentUser().getUid(), new FirebaseAgent.isUserRegistered() {
-                @Override
-                public void isRegistered(Boolean status, DocumentSnapshot ds) {
-                    if (status) {
-                        if (ds != null) {
+        //check net state
+        if (checkInternetConnection()){
+
+            //checking if a user is authenticated
+            if (idManager.checkAuth()){
+                agent.checkIfUserExists(new OnObjectExitListener<User>() {
+                    @Override
+                    public void onDataChanged(boolean exist) {
+                        if (exist){
                             finish();
                             agent.setDutyStatus(false);
                             startActivity(new Intent(MainActivity.this, Home.class));
-                        } else {
+                        }else {
                             startActivity(new Intent(MainActivity.this, Register.class));
                         }
-                    }else {
-                        startActivity(new Intent(MainActivity.this, Register.class));
                     }
+                });
 
-                }
-            });
-        }else {
-            authUser();
+            }else {
+                authUser();
+            }
         }
 
     }
@@ -113,21 +122,58 @@ public class MainActivity extends AppCompatActivity {
         if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp()){
             startActivity(new Intent(MainActivity.this, Register.class));
         }else {
-            agent.checkIfUserExists(auth.getCurrentUser().getUid(), new FirebaseAgent.isUserRegistered() {
+            agent.checkIfUserExists(new OnObjectExitListener<User>() {
                 @Override
-                public void isRegistered(Boolean status, DocumentSnapshot ds) {
-                    if (status){
-                        if (ds != null){
-                            finish();
-                            startActivity(new Intent(MainActivity.this, Home.class));
-                        }else {
-                            startActivity(new Intent(MainActivity.this, Register.class));
-                        }
+                public void onDataChanged(boolean exist) {
+                    if (exist){
+                        finish();
+                        agent.setDutyStatus(false);
+                        startActivity(new Intent(MainActivity.this, Home.class));
+                    }else {
+                        startActivity(new Intent(MainActivity.this, Register.class));
                     }
-
                 }
             });
         }
+    }
+
+    public void showProgress() {
+        showProgress(R.string.loading);
+    }
+
+    public void showProgress(int message) {
+        hideProgress();
+        progressDialog.setMessage(getString(message));
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+
+    public void hideProgress() {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+    }
+
+    public void showWarningDialog(String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(message);
+        builder.setPositiveButton(R.string.button_ok, null);
+        builder.show();
+    }
+
+    public boolean checkNetworkState(){
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    public boolean checkInternetConnection() {
+        boolean hasInternet = checkNetworkState();
+        if (!hasInternet){
+            showWarningDialog("No internet Connection");
+        }
+        return hasInternet;
     }
 
 }

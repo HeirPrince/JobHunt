@@ -19,9 +19,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.prince.jobhunt.ApplicationHelper;
 import com.example.prince.jobhunt.R;
 import com.example.prince.jobhunt.engine.AuthManager;
 import com.example.prince.jobhunt.engine.FirebaseAgent;
+import com.example.prince.jobhunt.engine.ProfileManager;
+import com.example.prince.jobhunt.engine.listeners.OnProfileCreatedListener;
+import com.example.prince.jobhunt.model.User;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.theartofdev.edmodo.cropper.CropImage;
 
@@ -61,7 +65,7 @@ public class Register extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
 
-        agent = new FirebaseAgent(this);
+        agent = ApplicationHelper.getFirebaseAgent();
         authManager = new AuthManager();
 
         //checking if a user is registered
@@ -105,12 +109,26 @@ public class Register extends AppCompatActivity {
         String e = email.getText().toString();
         String s = skills.get(skill.getSelectedIndex());
 
+        User user = new User();
+        user.setUid(authManager.getCurrentUID());
+        user.setUsername(u);
+        user.setEmail(e);
+        user.setCareer(s);
+        user.setAbout("Available");
+        user.setPhone_number(authManager.getCurrentUser());
 
-        if (file != null) {
-            agent.addUser(authManager.getCurrentUser(), u, authManager.getCurrentUID(), e, s, "Available", file);
-        } else {
-            Toast.makeText(this, "no image loaded", Toast.LENGTH_SHORT).show();
-        }
+        ProfileManager.getInstance(this).createProfile(user, new OnProfileCreatedListener() {
+            @Override
+            public void createdProfile(Boolean state) {
+                if (state){
+                    Toast.makeText(Register.this, "Profile created successfully", Toast.LENGTH_SHORT).show();
+                    finish();
+                    startActivity(new Intent(Register.this, Home.class));
+                }else {
+                    Toast.makeText(Register.this, "profile not created", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     //getting activity result

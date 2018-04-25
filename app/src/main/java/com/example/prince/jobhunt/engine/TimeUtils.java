@@ -25,10 +25,20 @@ public class TimeUtils extends DateTimeUtils {
 			calendar.setTimeInMillis(timeStamp * 1000);
 			calendar.add(Calendar.MILLISECOND, tz.getOffset(calendar.getTimeInMillis()));
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			Date currenTimeZone = (Date) calendar.getTime();
+			Date currenTimeZone = calendar.getTime();
 			return sdf.format(currenTimeZone);
 		}catch (Exception e) {
 		}
 		return "";
+	}
+
+	public Boolean isTday(String timeStamp){
+		if (DateTimeUtils.isToday(extractFromTimestamp(Long.parseLong(timeStamp))))return true;
+		else return false;
+	}
+
+	public Boolean isYday(String timeStamp){
+		if (DateTimeUtils.isYesterday(extractFromTimestamp(Long.parseLong(timeStamp)))) return true;
+		else return false;
 	}
 }

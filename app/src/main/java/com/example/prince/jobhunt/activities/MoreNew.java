@@ -37,9 +37,9 @@ public class MoreNew extends AppCompatActivity {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		agent = new FirebaseAgent(this);
 
-		agent.getAllNewJobs(new FirebaseAgent.jobList() {
+		agent.getJobList(new FirebaseAgent.jobList() {
 			@Override
-			public void jobList(List<Job> jobs, List<String> ids) {
+			public void All(List<Job> jobs, List<String> ids) {
 				if (jobs != null && ids != null){
 					doneLoading(true, jobs, ids);
 				}else {
@@ -47,7 +47,6 @@ public class MoreNew extends AppCompatActivity {
 				}
 			}
 		});
-
 	}
 
 	public void doneLoading(Boolean state, List<Job> jobs, List<String> ids){

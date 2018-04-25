@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.prince.jobhunt.R;
 import com.example.prince.jobhunt.ViewHolders.JobHeaderViewHolder;
@@ -25,6 +26,7 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection;
 
 public class NewSection extends StatelessSection {
 
+	public static final String TAG = NewSection.class.getSimpleName();
 	private String title;
 	private List<Job> jobs;
 	private List<String> ids;
@@ -70,30 +72,38 @@ public class NewSection extends StatelessSection {
 		final Job model = jobs.get(position);
 		final String id = ids.get(position);
 
-		agnt.downloadImage(id, Constants.IMAGE_PATH_JOBS_MAIN, new FirebaseAgent.OnImageDownload() {
-			@Override
-			public void isDownloaded(Boolean status, final String url) {
-				agnt.getUserByUID(model.getOwner(), new FirebaseAgent.getUser() {
-					@Override
-					public void gottenUser(User user) {
-						Jholder.setJob(model, url, user.getUsername());
+		if (jobs != null && ids != null){
+			agnt.downloadImage(id, Constants.IMAGE_PATH_JOBS_MAIN, new FirebaseAgent.OnImageDownload() {
+				@Override
+				public void isDownloaded(Boolean status, final String url) {
+					if (url != null){
+						agnt.getUserByUID(model.getOwner(), new FirebaseAgent.getUser() {
+							@Override
+							public void gottenUser(User user) {
+								Jholder.setJob(model, url);
+							}
+						});
+					}else {
+						Toast.makeText(ctx, "user image not found", Toast.LENGTH_SHORT).show();
 					}
-				});
-			}
-		});
+				}
+			});
 
-		Jholder.itemView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				Intent i = new Intent(ctx, JobInfo.class);
-				i.putExtra("job_title", model.getTitle());
-				i.putExtra("job_image", model.getImage());
-				i.putExtra("job_id", id);
-				i.putExtra("job_desc", model.getDesc());
-				i.putExtra("job_timestamp", timeUtils.extractFromTimestamp(Long.parseLong(model.getTimeStamp())));
-				i.putExtra("job_location", model.getLocation());
-				ctx.startActivity(i);
-			}
-		});
+			Jholder.itemView.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					Intent i = new Intent(ctx, JobInfo.class);
+					i.putExtra("job_title", model.getTitle());
+					i.putExtra("job_image", model.getImage());
+					i.putExtra("job_id", id);
+					i.putExtra("job_desc", model.getDesc());
+					i.putExtra("job_timestamp", timeUtils.extractFromTimestamp(Long.parseLong(model.getTimeStamp())));
+					i.putExtra("job_location", model.getLocation());
+					ctx.startActivity(i);
+				}
+			});
+		}else {
+			Toast.makeText(ctx, "empty lists", Toast.LENGTH_SHORT).show();
+		}
 	}
 }
